@@ -1,6 +1,7 @@
 # twitreport - basic command line Twitter reporting app
 # initially, borrows heavily from Tweepy example code:
 #    http://pythonhosted.org/tweepy/getting_started.html#hello-tweepy
+# For Twitter tweet structure: https://dev.twitter.com/overview/api/tweets
 
 import json
 import tweepy
@@ -24,6 +25,15 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 
-public_tweets = api.home_timeline()
-for tweet in public_tweets:
+api = tweepy.API(auth)
+
+query = '%22scale+sets%22'
+count = 10
+for tweet in tweepy.Cursor(api.search,
+        q=query,
+        result_type="recent",
+        include_entities=True,
+        lang="en").items(count):
+    print("User: " + tweet.user.name)
+    print("Created at: " + str(tweet.created_at))
     print(tweet.text)
