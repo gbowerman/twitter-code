@@ -25,8 +25,6 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 
-api = tweepy.API(auth)
-
 query = '%22scale+sets%22'
 count = 10
 for tweet in tweepy.Cursor(api.search,
