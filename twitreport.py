@@ -1,5 +1,5 @@
 # twitreport - basic command line Twitter reporting app
-# initially, borrows heavily from Tweepy example code:
+# initially, borrows from Tweepy example code:
 #    http://pythonhosted.org/tweepy/getting_started.html#hello-tweepy
 # For Twitter tweet structure: https://dev.twitter.com/overview/api/tweets
 
