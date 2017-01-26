@@ -24,8 +24,8 @@ def twitter_query(api, webhook, count, querystr):
             lang="en").items(count):
         text += '\n' + tweet.user.name + ' at: ' + str(tweet.created_at) + '\n'
         text += tweet.text
-    slack_data = {'username': 'vmssbot', 'icon_emoji': ':vmss:', 'text': text}
-    slack_post(webhook, json.dumps(slack_data))
+    return text
+
 
 # load twitter and Slack auth info
 try:
@@ -34,24 +34,30 @@ try:
 except FileNotFoundError:
     print("Error: Expecting twitconfig.json in current folder")
     sys.exit()
+search_strings = configData['searchStrings']
 consumer_key = configData['consumerKey']
 consumer_secret = configData['consumerSecret']
 access_token = configData['accessToken']
 access_token_secret = configData['accessTokenSecret']
 webhook = configData['slackWebhook']
+slack_username = configData['slackUserName']
+slack_emoji = configData['slackIconEmoji']
 
 # set query date for last 24 hours
 date = datetime.datetime.now()
 date -= datetime.timedelta(hours=24)
 datestr = date.strftime("%Y-%m-%d")
-query1 = '%22scale+sets%22 since:' + datestr
-# query2 = 'vmss since:' + datestr
 count = 20
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-twitter_query(api, webhook, count, query1)
-#twitter_query(api, webhook, count, query2)
+# kick off a search for each search string in the config file
+for search_str in search_strings:
+    query = search_str + ' since:' + datestr
+    twitter_text = twitter_query(api, webhook, count, query)
+    slack_data = {'username': slack_username, 'icon_emoji': slack_emoji, 'text': twitter_text}
+    slack_post(webhook, json.dumps(slack_data))
+
 
