@@ -2,36 +2,56 @@
 # initially, borrows from Tweepy example code:
 #    http://pythonhosted.org/tweepy/getting_started.html#hello-tweepy
 # For Twitter tweet structure: https://dev.twitter.com/overview/api/tweets
+# Slack: https://github.com/os/slacker
 
+import datetime
 import json
-import tweepy
+import requests
 import sys
+import tweepy
 
-# load twitter auth info
+def slack_post(webhook, body):
+    headers = {"content-type": "application/json"}
+    response = requests.post(webhook, data=body, headers=headers)
+    print(str(response.status_code) + ': ' + response.text)
+
+def twitter_query(api, webhook, count, querystr):
+    text = 'Tweets on ' + querystr + '\n'
+    for tweet in tweepy.Cursor(api.search,
+            q=querystr,
+            result_type="recent",
+            include_entities=False, # set this True to resolve URLs etc.
+            lang="en").items(count):
+        text += '\n' + tweet.user.name + ' at: ' + str(tweet.created_at) + '\n'
+        text += tweet.text
+    slack_data = {'username': 'vmssbot', 'icon_emoji': ':vmss:', 'text': text}
+    slack_post(webhook, json.dumps(slack_data))
+
+# load twitter and Slack auth info
 try:
     with open('twitconfig.json') as configFile:
         configData = json.load(configFile)
 except FileNotFoundError:
     print("Error: Expecting twitconfig.json in current folder")
     sys.exit()
-
 consumer_key = configData['consumerKey']
 consumer_secret = configData['consumerSecret']
 access_token = configData['accessToken']
 access_token_secret = configData['accessTokenSecret']
+webhook = configData['slackWebhook']
+
+# set query date for last 24 hours
+date = datetime.datetime.now()
+date -= datetime.timedelta(hours=24)
+datestr = date.strftime("%Y-%m-%d")
+query1 = '%22scale+sets%22 since:' + datestr
+# query2 = 'vmss since:' + datestr
+count = 20
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
-
 api = tweepy.API(auth)
 
-query = '%22scale+sets%22'
-count = 10
-for tweet in tweepy.Cursor(api.search,
-        q=query,
-        result_type="recent",
-        include_entities=True,
-        lang="en").items(count):
-    print("User: " + tweet.user.name)
-    print("Created at: " + str(tweet.created_at))
-    print(tweet.text)
+twitter_query(api, webhook, count, query1)
+#twitter_query(api, webhook, count, query2)
+
