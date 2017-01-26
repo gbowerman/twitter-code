@@ -16,7 +16,7 @@ def slack_post(webhook, body):
     print(str(response.status_code) + ': ' + response.text)
 
 def twitter_query(api, webhook, count, querystr):
-    text = 'Tweets on ' + querystr + '\n'
+    text = 'Tweets on ' + querystr.replace('%22', '"').replace('+', ' ') + '\n'
     for tweet in tweepy.Cursor(api.search,
             q=querystr,
             result_type="recent",
