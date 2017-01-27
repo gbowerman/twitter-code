@@ -27,7 +27,7 @@ def twitter_query(api, webhook, count, querystr):
     return text
 
 
-# load twitter and Slack auth info
+# load twitter and Slack auth info (think about a separate auth class for this)
 try:
     with open('twitconfig.json') as configFile:
         configData = json.load(configFile)

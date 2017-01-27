@@ -1,6 +1,6 @@
 # Twitter/social media tool repo
 
-Tool to search Twitter posts and other social media forums and share highlights, e.g. to a Slack channel.
+Tools to search Twitter posts and other social media forums and share highlights, e.g. to a Slack channel.
 
 ## twit-report.py
 
