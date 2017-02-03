@@ -10,20 +10,27 @@ import requests
 import sys
 import tweepy
 
-def slack_post(webhook, body):
+# generic function to post to slack or Microsoft team
+# set webhook and body accordingly
+def channel_post(webhook, body):
     headers = {"content-type": "application/json"}
     response = requests.post(webhook, data=body, headers=headers)
     print(str(response.status_code) + ': ' + response.text)
 
-def twitter_query(api, webhook, count, querystr):
+
+def twitter_query(api, count, querystr):
     text = 'Tweets on ' + querystr.replace('%22', '"').replace('+', ' ') + '\n'
+    tweet_count = 0
     for tweet in tweepy.Cursor(api.search,
             q=querystr,
             result_type="recent",
             include_entities=False, # set this True to resolve URLs etc.
             lang="en").items(count):
+        tweet_count += 1
         text += '\n' + tweet.user.name + ' at: ' + str(tweet.created_at) + '\n'
         text += tweet.text
+    if tweet_count == 0:
+        return None
     return text
 
 
@@ -39,8 +46,10 @@ consumer_key = configData['consumerKey']
 consumer_secret = configData['consumerSecret']
 access_token = configData['accessToken']
 access_token_secret = configData['accessTokenSecret']
-webhook = configData['slackWebhook']
-slack_username = configData['slackUserName']
+# slack_webhook = configData['slackWebhook']
+# slack_username = configData['slackUserName']
+teams_webhook = configData['teamsWebhook']
+teams_msg_title = configData['teamsMsgTitle']
 slack_emoji = configData['slackIconEmoji']
 
 # set query date for last 24 hours
@@ -56,8 +65,11 @@ api = tweepy.API(auth)
 # kick off a search for each search string in the config file
 for search_str in search_strings:
     query = search_str + ' since:' + datestr
-    twitter_text = twitter_query(api, webhook, count, query)
-    slack_data = {'username': slack_username, 'icon_emoji': slack_emoji, 'text': twitter_text}
-    slack_post(webhook, json.dumps(slack_data))
+    twitter_text = twitter_query(api, count, query)
+    if twitter_text is not None:
+        teams_data = {'title': teams_msg_title,'text': twitter_text}
+        channel_post(teams_webhook, json.dumps(teams_data))
+        #slack_data = {'username': slack_username, 'icon_emoji': slack_emoji, 'text': twitter_text}
+        #channel_post(slack_webhook, json.dumps(slack_data))
 
 
