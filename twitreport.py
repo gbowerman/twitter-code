@@ -62,6 +62,9 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
+# teams_data = {'title': 'Notifications channel test','text': 'By all means ignore'}
+# channel_post(teams_webhook, json.dumps(teams_data))
+
 # kick off a search for each search string in the config file
 for search_str in search_strings:
     query = search_str + ' since:' + datestr
