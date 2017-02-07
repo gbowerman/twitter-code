@@ -19,7 +19,8 @@ def channel_post(webhook, body):
 
 
 def twitter_query(api, count, querystr):
-    text = 'Tweets on ' + querystr.replace('%22', '"').replace('+', ' ') + '\n'
+    querystr_plain = querystr.replace('%22', '"').replace('+', ' ')
+    text = 'Tweets on ' + querystr_plain + '\n'
     tweet_count = 0
     for tweet in tweepy.Cursor(api.search,
             q=querystr,
@@ -30,6 +31,7 @@ def twitter_query(api, count, querystr):
         text += '\n' + tweet.user.name + ' at: ' + str(tweet.created_at) + '\n'
         text += tweet.text
     if tweet_count == 0:
+        print('No tweets on ' + querystr_plain)
         return None
     return text
 
@@ -74,5 +76,3 @@ for search_str in search_strings:
         channel_post(teams_webhook, json.dumps(teams_data))
         #slack_data = {'username': slack_username, 'icon_emoji': slack_emoji, 'text': twitter_text}
         #channel_post(slack_webhook, json.dumps(slack_data))
-
-
