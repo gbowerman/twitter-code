@@ -6,16 +6,18 @@
 
 import datetime
 import json
-import requests
 import sys
+
+import requests
 import tweepy
+
 
 # generic function to post to slack or Microsoft team
 # set webhook and body accordingly
 def channel_post(webhook, body):
     headers = {"content-type": "application/json"}
     response = requests.post(webhook, data=body, headers=headers)
-    print(str(response.status_code) + ': ' + response.text)
+    print('Channel post response: ' + str(response.status_code) + ': ' + response.text)
 
 
 def twitter_query(api, count, querystr):
@@ -30,8 +32,8 @@ def twitter_query(api, count, querystr):
         tweet_count += 1
         text += '\n' + tweet.user.name + ' at: ' + str(tweet.created_at) + '\n'
         text += tweet.text
+    print(str(count) + ' tweets on ' + querystr_plain)
     if tweet_count == 0:
-        print('No tweets on ' + querystr_plain)
         return None
     return text
 
