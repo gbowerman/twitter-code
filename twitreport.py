@@ -32,7 +32,7 @@ def twitter_query(api, count, querystr):
         tweet_count += 1
         text += '\n' + tweet.user.name + ' at: ' + str(tweet.created_at) + '\n'
         text += tweet.text
-    print(str(count) + ' tweets on ' + querystr_plain)
+    print(str(tweet_count) + ' tweets on ' + querystr_plain)
     if tweet_count == 0:
         return None
     return text
