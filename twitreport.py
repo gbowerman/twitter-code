@@ -71,7 +71,7 @@ api = tweepy.API(auth)
 
 # kick off a search for each search string in the config file
 for search_str in search_strings:
-    query = search_str + ' since:' + datestr
+    query = search_str + ' since: ' + datestr
     twitter_text = twitter_query(api, count, query)
     if twitter_text is not None:
         teams_data = {'title': teams_msg_title,'text': twitter_text}
