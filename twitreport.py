@@ -24,14 +24,17 @@ def twitter_query(api, count, querystr):
     querystr_plain = querystr.replace('%22', '"').replace('+', ' ')
     text = 'Tweets on ' + querystr_plain + '\n'
     tweet_count = 0
-    for tweet in tweepy.Cursor(api.search,
-            q=querystr,
-            result_type="recent",
-            include_entities=False, # set this True to resolve URLs etc.
-            lang="en").items(count):
-        tweet_count += 1
-        text += '\n' + tweet.user.name + ' at: ' + str(tweet.created_at) + '\n'
-        text += tweet.text
+    try:
+        for tweet in tweepy.Cursor(api.search,
+                q=querystr,
+                result_type="recent",
+                include_entities=False, # set this True to resolve URLs etc.
+                lang="en").items(count):
+            tweet_count += 1
+            text += '\n' + tweet.user.name + ' at: ' + str(tweet.created_at) + '\n'
+            text += tweet.text
+    except tweepy.TweepError as e:
+       print("Error: " + e.reason)
     print(str(tweet_count) + ' tweets on ' + querystr_plain)
     if tweet_count == 0:
         return None
@@ -66,12 +69,13 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
+
 # teams_data = {'title': 'Notifications channel test','text': 'By all means ignore'}
 # channel_post(teams_webhook, json.dumps(teams_data))
 
 # kick off a search for each search string in the config file
 for search_str in search_strings:
-    query = search_str + ' since: ' + datestr
+    query = search_str + ' since:' + datestr
     twitter_text = twitter_query(api, count, query)
     if twitter_text is not None:
         teams_data = {'title': teams_msg_title,'text': twitter_text}
