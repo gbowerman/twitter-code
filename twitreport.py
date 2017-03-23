@@ -32,7 +32,7 @@ def twitter_query(api, count, querystr):
                 lang="en").items(count):
             tweet_count += 1
             text += '\n' + tweet.user.name + ' at: ' + str(tweet.created_at) + '\n'
-            text += tweet.text
+            text += tweet.text + '\n'
     except tweepy.TweepError as e:
        print("Error: " + e.reason)
     print(str(tweet_count) + ' tweets on ' + querystr_plain)
