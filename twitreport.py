@@ -2,7 +2,6 @@
 # initially, borrows from Tweepy example code:
 #    http://pythonhosted.org/tweepy/getting_started.html#hello-tweepy
 # For Twitter tweet structure: https://dev.twitter.com/overview/api/tweets
-# Slack: https://github.com/os/slacker
 
 import datetime
 import json
@@ -55,27 +54,23 @@ access_token = configData['accessToken']
 access_token_secret = configData['accessTokenSecret']
 # slack_webhook = configData['slackWebhook']
 # slack_username = configData['slackUserName']
+# slack_emoji = configData['slackIconEmoji']
 teams_webhook = configData['teamsWebhook']
 teams_msg_title = configData['teamsMsgTitle']
-slack_emoji = configData['slackIconEmoji']
 
 # set query date for last 24 hours
 date = datetime.datetime.now()
 date -= datetime.timedelta(hours=24)
 datestr = date.strftime("%Y-%m-%d")
-count = 20
+count = 30
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-
-# teams_data = {'title': 'Notifications channel test','text': 'By all means ignore'}
-# channel_post(teams_webhook, json.dumps(teams_data))
-
 # kick off a search for each search string in the config file
 for search_str in search_strings:
-    query = search_str + ' since:' + datestr
+    query = search_str + ' since: ' + datestr
     twitter_text = twitter_query(api, count, query)
     if twitter_text is not None:
         teams_data = {'title': teams_msg_title,'text': twitter_text}
