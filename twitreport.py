@@ -16,7 +16,8 @@ import tweepy
 def channel_post(webhook, body):
     headers = {"content-type": "application/json"}
     response = requests.post(webhook, data=body, headers=headers)
-    print('Channel post response: ' + str(response.status_code) + ': ' + response.text)
+    print('Channel post response: ' +
+          str(response.status_code) + ': ' + response.text)
 
 
 def twitter_query(api, count, querystr):
@@ -24,16 +25,13 @@ def twitter_query(api, count, querystr):
     text = 'Tweets on ' + querystr_plain + '\n'
     tweet_count = 0
     try:
-        for tweet in tweepy.Cursor(api.search,
-                q=querystr,
-                result_type="recent",
-                include_entities=False, # set this True to resolve URLs etc.
-                lang="en").items(count):
+        for tweet in tweepy.Cursor(api.search, q=querystr).items(count):
             tweet_count += 1
-            text += '\n' + tweet.user.name + ' at: ' + str(tweet.created_at) + '\n'
+            text += '\n' + tweet.user.name + \
+                ' at: ' + str(tweet.created_at) + '\n'
             text += tweet.text + '\n'
     except tweepy.TweepError as e:
-       print("Error: " + e.reason)
+        print("Error: " + e.reason)
     print(str(tweet_count) + ' tweets on ' + querystr_plain)
     if tweet_count == 0:
         return None
@@ -68,12 +66,17 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
+user = api.me()
+print('Name: ' + user.name)
+print('Location: ' + user.location)
+
 # kick off a search for each search string in the config file
 for search_str in search_strings:
-    query = search_str + ' since: ' + datestr
+    query = search_str + ' since:' + datestr
+    print("Query=" + query)
     twitter_text = twitter_query(api, count, query)
     if twitter_text is not None:
-        teams_data = {'title': teams_msg_title,'text': twitter_text}
+        teams_data = {'title': teams_msg_title, 'text': twitter_text}
         channel_post(teams_webhook, json.dumps(teams_data))
         #slack_data = {'username': slack_username, 'icon_emoji': slack_emoji, 'text': twitter_text}
         #channel_post(slack_webhook, json.dumps(slack_data))
