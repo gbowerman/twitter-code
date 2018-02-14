@@ -72,11 +72,12 @@ print('Location: ' + user.location)
 
 # kick off a search for each search string in the config file
 for search_str in search_strings:
-    query = search_str + ' since:' + datestr
+    query = search_str + ' since:' + datestr + ' -filter:retweets'
     print("Query=" + query)
     twitter_text = twitter_query(api, count, query)
     if twitter_text is not None:
         teams_data = {'title': teams_msg_title, 'text': twitter_text}
+        # print(twitter_text)
         channel_post(teams_webhook, json.dumps(teams_data))
         #slack_data = {'username': slack_username, 'icon_emoji': slack_emoji, 'text': twitter_text}
         #channel_post(slack_webhook, json.dumps(slack_data))
