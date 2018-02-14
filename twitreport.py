@@ -25,11 +25,11 @@ def twitter_query(api, count, querystr):
     text = 'Tweets on ' + querystr_plain + '\n'
     tweet_count = 0
     try:
-        for tweet in tweepy.Cursor(api.search, q=querystr).items(count):
+        for tweet in tweepy.Cursor(api.search, q=querystr, tweet_mode='extended').items(count):
             tweet_count += 1
             text += '\n' + tweet.user.name + \
                 ' at: ' + str(tweet.created_at) + '\n'
-            text += tweet.text + '\n'
+            text += tweet.full_text + '\n'
     except tweepy.TweepError as e:
         print("Error: " + e.reason)
     print(str(tweet_count) + ' tweets on ' + querystr_plain)
