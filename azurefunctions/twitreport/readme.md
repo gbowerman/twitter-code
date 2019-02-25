@@ -1,11 +1,30 @@
-# TimerTrigger - Python
+# Social media reporter function for Teams
 
-The `TimerTrigger` makes it incredibly easy to have your functions executed on a schedule. This sample demonstrates a simple use case of calling your function every 5 minutes.
+This Python-based Twitter search tool is designed to be triggered as an Azure Function using a daily Timer Trigger, and post to a Microsoft Teams webhook.
 
-## How it works
+This code makes use of the Azure Functions `TimerTrigger`, which makes it easy to execute functions on a schedule.
 
-For a `TimerTrigger` to work, you provide a schedule in the form of a [cron expression](https://en.wikipedia.org/wiki/Cron#CRON_expression)(See the link for full details). A cron expression is a string with 6 separate expressions which represent a given schedule via patterns. The pattern we use to represent every 5 minutes is `0 */5 * * * *`. This, in plain text, means: "When seconds is equal to 0, minutes is divisible by 5, for any hour, day of the month, month, day of the week, or year".
+## Advantages of running as a schedule-based Azure Function
 
-## Learn more
+- __Before__: Windows scheduled task that would run on a laptop at a fixed time or the next time it was opened. I.e. single point of failure.
+- __After__: serverless i.e. no infrastructure dependency.
 
-<TODO> Documentation
+- __Before__: Twitter credentials, Teams webhook, search strings stored locally in config file.
+- __After__: Config details stored as app settings configurable/updateable in Azure Portal.
+
+## App settings configured in Azure Portal
+
+Application Settings are encrypted at rest and transmitted over an encrypted channel. Set these in the Azure Portal, and they appear as environment variables to the Python code.
+
+### Access settings for Tweepy
+- accessToken - Twitter accessToken
+- accessTokenSecret - Twitter token secret
+- consumerKey - Twitter consumer key
+- consumerSecret - Twitter consumer secret
+
+### Twitter search settings
+- searchStrings - Search strings for Twitter query e.g. ["azure+linux", "azure+OSS", "azure+%22red+hat%22"]
+
+### Microsoft Teams webhook settings
+- teamsMsgTitle - Message title for Teams message
+- teamsWebhook - webhook for specific Teams channel
