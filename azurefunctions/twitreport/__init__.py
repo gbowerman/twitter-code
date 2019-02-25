@@ -37,7 +37,7 @@ def twitter_query(api, count, querystr):
 
 
 def main(mytimer: func.TimerRequest) -> None:
-    '''load twitter and Slack auth info (think about a separate auth class for this)'''
+    '''load twitter auth and configuration info and trigger search'''
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
 
