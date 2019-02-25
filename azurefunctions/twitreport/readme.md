@@ -1,4 +1,4 @@
-# Social media reporter function for Teams
+# Social media reporter for Teams
 
 This Python-based Twitter search tool is designed to be triggered as an Azure Function using a daily Timer Trigger, and post to a Microsoft Teams webhook.
 
