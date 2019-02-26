@@ -2,7 +2,7 @@
 
 This Python-based Twitter search tool is designed to be triggered as an Azure Function using a daily Timer Trigger, and post to a Microsoft Teams webhook.
 
-![](../img/mediareport.png)
+![](../img/mediareport.png =250x)
 
 ## Advantages of running as a schedule-based Azure Function
 
