@@ -4,12 +4,14 @@ This Python-based Twitter search tool is designed to be triggered as an Azure Fu
 
 This code makes use of the Azure Functions `TimerTrigger`, which makes it easy to execute functions on a schedule.
 
+![](../img/mediareport.png)
+
 ## Advantages of running as a schedule-based Azure Function
 
-- __Before__: Windows scheduled task that would run on a laptop at a fixed time or the next time it was opened. I.e. single point of failure.
-- __After__: serverless i.e. no infrastructure dependency.
+- __Before__: A scheduled task that would run on a physical machine at a fixed time or the next time it was started. I.e. single point of failure.
+- __After__: Serverless i.e. no infrastructure dependency.
 
-- __Before__: Twitter credentials, Teams webhook, search strings stored locally in config file.
+- __Before__: Twitter credentials, Teams webhook and search strings stored locally in config file.
 - __After__: Config details stored as app settings configurable/updateable in Azure Portal.
 
 ## App settings configured in Azure Portal
