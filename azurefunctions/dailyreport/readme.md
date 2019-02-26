@@ -1,6 +1,6 @@
 # Social media reporter for Teams
 
-This Python-based Twitter search tool is designed to be triggered as an Azure Function using a daily Timer Trigger, and post to a Microsoft Teams webhook. You can use it to implement a daily search for mentions of specific topics and report them to a messaging channel. This code can easily be adapted to perform other daily tasks, and send messages to other webhooks (like Slack for example).
+This Python-based Twitter search tool is designed to be triggered as an Azure Function using a daily Timer Trigger, and post its output to a Microsoft Teams channel webhook. You can use it to implement a daily search for social media mentions of specific topics and report them to a messaging channel. This pattern can easily be adapted to perform other daily tasks, and send messages to other webhooks (like Slack for example).
 
 ![](../img/mediareport.png)
 
@@ -8,11 +8,9 @@ This Python-based Twitter search tool is designed to be triggered as an Azure Fu
 
 This code uses an Azure Function `TimerTrigger`, which makes it easy to execute functions on a schedule.
 
-- __Before__: A scheduled task that would run on a physical machine at a fixed time or the next time it was started. I.e. single point of failure.
-- __After__: Serverless i.e. no infrastructure dependency.
+- __Reliability__ and __maintainability__: A scheduled task running on a physical machine at a fixed time or the next time it was started has a single point of failure. A _serverless_ has no infrastructure dependency.
 
-- __Before__: Twitter credentials, Teams webhook and search strings stored locally in config file.
-- __After__: Config details stored as app settings configurable/updateable in Azure Portal.
+- __Security__: Instead of using a config file to store Twitter credentials, Teams webhook and search strings, they can be stored securely as app settings configurable/updateable in the Azure Portal.
 
 ## Setup instructions
 
@@ -64,6 +62,6 @@ Application Settings are encrypted at rest and transmitted over an encrypted cha
 - teamsMsgTitle - Message title for Teams message
 - teamsWebhook - webhook for specific Teams channel.
 
-Once the app settings are set, you test the function by running it from the portal. Select the function name and use the _Run_ button.
+Once the app settings are set, you test the function by running it from the portal. Select the function name and click the _Run_ button.
 
 ![](../img/runfunction.png)
