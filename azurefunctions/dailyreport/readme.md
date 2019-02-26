@@ -43,11 +43,13 @@ Note: If you are unsure of the  pre-requisites for creating an Azure Function, f
 
 ## App settings configured in Azure Portal
 
+![](../img/appsettings.png)
+
 To access Twitter from an application you need to create a Twitter API key and access token, as well as a consumer API key and consumer secret. For an example of how to create these see [HOW TO GENERATE API KEY, CONSUMER TOKEN, ACCESS KEY FOR TWITTER OAUTH](http://www.spardadesign.com/how-to-generate-api-key-consumer-token-access-key-for-twitter-oauth/).
 
 To post to a Microsoft Teams channel you will need to create an incoming webhook. For example refer to: [Using Incoming Webhooks in Microsoft Teams](http://itcloudpro.net/2017/09/29/office-365-using-incoming-webhooks-in-microsoft-teams/).
 
-Application Settings are encrypted at rest and transmitted over an encrypted channel. Set the following app settings in the Azure Portal, and they will appear as environment variables to the Python code:
+Application Settings are encrypted at rest and transmitted over an encrypted channel. Set the following app settings in the Azure Portal (you'll find Application settings under the heading "Configured features" when you click on the function project name). Once set, the application settings will appear as environment variables to the Python code:
 
 ### Access settings for Tweepy
 - accessToken - Twitter accessToken
@@ -60,4 +62,6 @@ Application Settings are encrypted at rest and transmitted over an encrypted cha
 
 ### Microsoft Teams webhook settings
 - teamsMsgTitle - Message title for Teams message
-- teamsWebhook - webhook for specific Teams channel
+- teamsWebhook - webhook for specific Teams channel.
+
+Once 
