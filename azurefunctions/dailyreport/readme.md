@@ -64,4 +64,6 @@ Application Settings are encrypted at rest and transmitted over an encrypted cha
 - teamsMsgTitle - Message title for Teams message
 - teamsWebhook - webhook for specific Teams channel.
 
-Once 
+Once the app settings are set, you test the function by running it from the portal. Select the function name and use the _Run_ button.
+
+![](../img/runfunction.png)
