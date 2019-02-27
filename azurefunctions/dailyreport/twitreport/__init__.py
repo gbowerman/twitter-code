@@ -17,7 +17,7 @@ def channel_post(webhook, body):
           str(response.status_code) + ': ' + response.text)
 
 
-def twitter_query(api, count, querystr):
+def twitter_query(api, querystr):
     '''Query the Twitter APi'''
     querystr_plain = querystr.replace('%22', '"').replace('+', ' ')
     text = 'Tweets on ' + querystr_plain + '\n'
@@ -37,10 +37,11 @@ def twitter_query(api, count, querystr):
 
 
 def main(mytimer: func.TimerRequest) -> None:
-    '''load twitter auth and configuration info and trigger search'''
+    '''load twitter auth, configuration info, and trigger search'''
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
 
+    # get application settings from environment
     search_strings = json.loads(os.environ['searchStrings'])
     consumer_key = os.environ['consumerKey']
     consumer_secret = os.environ['consumerSecret']
@@ -53,8 +54,8 @@ def main(mytimer: func.TimerRequest) -> None:
     date = datetime.datetime.now()
     date -= datetime.timedelta(hours=24)
     datestr = date.strftime("%Y-%m-%d")
-    count = 30
 
+    # authenticate to Twitter
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth)
@@ -67,7 +68,7 @@ def main(mytimer: func.TimerRequest) -> None:
     for search_str in search_strings:
         query = search_str + ' since:' + datestr + ' -filter:retweets'
         logging.info("Query=" + query)
-        twitter_text = twitter_query(api, count, query)
+        twitter_text = twitter_query(api, query)
         if twitter_text is not None:
             teams_data = {'title': teams_msg_title, 'text': twitter_text}
             # logging.info(twitter_text)
