@@ -8,6 +8,8 @@ import tweepy
 
 import azure.functions as func
 
+# set maximum number of tweets
+TWEET_COUNT = 50
 
 def channel_post(webhook, body):
     '''generic function to post to slack or Microsoft Team'''
@@ -17,7 +19,7 @@ def channel_post(webhook, body):
           str(response.status_code) + ': ' + response.text)
 
 
-def twitter_query(api, querystr):
+def twitter_query(api, querystr, count):
     '''Query the Twitter APi'''
     querystr_plain = querystr.replace('%22', '"').replace('+', ' ')
     text = 'Tweets on ' + querystr_plain + '\n'
@@ -68,7 +70,7 @@ def main(mytimer: func.TimerRequest) -> None:
     for search_str in search_strings:
         query = search_str + ' since:' + datestr + ' -filter:retweets'
         logging.info("Query=" + query)
-        twitter_text = twitter_query(api, query)
+        twitter_text = twitter_query(api, query, TWEET_COUNT)
         if twitter_text is not None:
             teams_data = {'title': teams_msg_title, 'text': twitter_text}
             # logging.info(twitter_text)
